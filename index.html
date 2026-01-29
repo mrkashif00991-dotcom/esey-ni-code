@@ -138,3 +138,40 @@ document.getElementById("sendPromptBtn").addEventListener("click", async functio
     alert(data.output_text); // response ویب سائٹ پر دکھائے
 });
 </script>
+<div>
+  <textarea id="userPrompt" placeholder="اپنا سوال یہاں لکھیں..." rows="4" cols="50"></textarea>
+</div>
+<div>
+  <button id="sendBtn">Send</button>
+</div>
+<div>
+  <h3>Response:</h3>
+  <div id="responseOutput"></div>
+</div><script>
+document.getElementById("sendBtn").addEventListener("click", async () => {
+  const prompt = document.getElementById("userPrompt").value;
+  if (!prompt) {
+    alert("Please type something!");
+    return;
+  }
+
+  const responseDiv = document.getElementById("responseOutput");
+  responseDiv.innerHTML = "Loading...";
+
+  try {
+    const res = await fetch("YOUR_SERVERLESS_ENDPOINT_URL", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    const data = await res.json();
+    responseDiv.innerHTML = data.reply;  // Server سے جواب آئے گا
+  } catch (err) {
+    console.error(err);
+    responseDiv.innerHTML = "Error occured. Check console.";
+  }
+});
+</script>
