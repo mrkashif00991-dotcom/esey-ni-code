@@ -118,3 +118,23 @@
   // Response generate کریں
   generateResponse(myPrompt);
 </script>
+<script>
+document.getElementById("sendPromptBtn").addEventListener("click", async function() {
+    const promptText = "ہیلو، مجھے میری ایپ کے لیے ڈیزائن بتاؤ";
+
+    const response = await fetch("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${process.env.OPENAI_KEY}` // GitHub secret یہاں استعمال ہوگا
+        },
+        body: JSON.stringify({
+            model: "gpt-5-mini",
+            input: promptText
+        })
+    });
+
+    const data = await response.json();
+    alert(data.output_text); // response ویب سائٹ پر دکھائے
+});
+</script>
