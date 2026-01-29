@@ -71,4 +71,50 @@
   </div>
 
 </body>
-</html><!-- test -->
+</html><!-- test --><!-- آپ کا باقی HTML content یہاں ہوگا -->
+
+<script>
+  // اپنا API key یہاں ڈالیں
+  const OPENAI_API_KEY = "اپنی-API-KEY-یہاں";
+
+  let responseContainer = document.getElementById("ai-response");
+  if(!responseContainer){
+      responseContainer = document.createElement("div");
+      responseContainer.id = "ai-response";
+      responseContainer.style.padding = "10px";
+      responseContainer.style.border = "1px solid #ccc";
+      responseContainer.style.marginTop = "20px";
+      responseContainer.style.background = "#f9f9f9";
+      document.body.appendChild(responseContainer);
+  }
+
+  async function generateResponse(promptText) {
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "gpt-5.2-mini",
+          messages: [{role: "user", content: promptText}],
+          max_tokens: 500
+        })
+      });
+
+      const data = await response.json();
+      const result = data.choices[0].message.content;
+      responseContainer.innerText = result;
+    } catch (err) {
+      responseContainer.innerText = "Error: " + err.message;
+      console.error(err);
+    }
+  }
+
+  // Promt یہاں لکھیں
+  const myPrompt = "Easy App Builder: یوزرز کو بغیر کوڈنگ اپنی موبائل ایپ بنانے اور کنٹرول کرنے کی مکمل سہولت دیتا ہے۔";
+
+  // Response generate کریں
+  generateResponse(myPrompt);
+</script>
